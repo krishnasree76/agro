@@ -48,51 +48,58 @@ const Navbar = () => {
           </span>
         </a>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-6">
-          <LanguageToggle isScrolled={isScrolled} isHomePage={isHomePage} />
+        {/* Right Side Actions (Desktop & Mobile) */}
+        <div className="flex items-center gap-2 md:gap-6">
           
-          {navLinks.map((link) => (
-            link.isRoute ? (
-              <Link 
-                key={link.name} 
-                to={link.href} 
-                className={`font-medium transition-colors ${isScrolled ? 'text-white/90 hover:text-white' : 'text-primary hover:text-green-700'}`}
-              >
-                {link.name}
-              </Link>
-            ) : (
-              <a 
-                key={link.name} 
-                href={link.href} 
-                className={`font-medium transition-colors ${isScrolled ? 'text-white/90 hover:text-white' : 'text-primary hover:text-green-700'}`}
-              >
-                {link.name}
-              </a>
-            )
-          ))}
-          
-          <Cart />
-          
-          <a href="tel:8008419933" className="btn-accent flex items-center gap-2">
-            <Phone className="w-4 h-4" />
-            {t('nav.callNow')}
-          </a>
-        </div>
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-6">
+            <LanguageToggle isScrolled={isScrolled} isHomePage={isHomePage} />
+            {navLinks.map((link) => (
+              link.isRoute ? (
+                <Link 
+                  key={link.name} 
+                  to={link.href} 
+                  className={`font-medium transition-colors ${isScrolled ? 'text-white/90 hover:text-white' : 'text-primary hover:text-green-700'}`}
+                >
+                  {link.name}
+                </Link>
+              ) : (
+                <a 
+                  key={link.name} 
+                  href={link.href} 
+                  className={`font-medium transition-colors ${isScrolled ? 'text-white/90 hover:text-white' : 'text-primary hover:text-green-700'}`}
+                >
+                  {link.name}
+                </a>
+              )
+            ))}
+          </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className={`md:hidden p-2 rounded-lg ${isScrolled ? 'text-white' : 'text-primary'}`}
-        >
-          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+          {/* Cart Icon - Visible on both Desktop and Mobile */}
+          {/* On mobile, this will appear to the left of the Menu button */}
+          <Cart />
+
+          {/* Desktop Call Button */}
+          <div className="hidden md:block">
+            <a href="tel:8008419933" className="btn-accent flex items-center gap-2">
+              <Phone className="w-4 h-4" />
+              {t('nav.callNow')}
+            </a>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className={`md:hidden p-2 rounded-lg ${isScrolled ? 'text-white' : 'text-primary'}`}
+          >
+            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
         <div className="md:hidden absolute top-full left-0 right-0 bg-white border-t shadow-lg p-4 flex flex-col gap-4 animate-in fade-in slide-in-from-top-2">
-          {/* Force white-mode colors in mobile menu since menu background is always white */}
           <LanguageToggle isScrolled={false} isHomePage={true} />
           
           {navLinks.map((link) => (
@@ -105,11 +112,6 @@ const Navbar = () => {
               {link.name}
             </a>
           ))}
-          
-          <div className="flex items-center justify-between py-2">
-            <span className="font-medium text-primary">{t('nav.cart')}</span>
-            <Cart />
-          </div>
           
           <a href="tel:8008419933" className="btn-accent flex items-center justify-center gap-2 py-3">
             <Phone className="w-4 h-4" />

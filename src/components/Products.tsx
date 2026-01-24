@@ -62,61 +62,58 @@ const ProductCard = ({ product }: { product: Product }) => {
   };
 
   return (
-    <div className={`product-card group border rounded-xl transition ${product.inStock ? 'border-primary/30' : 'border-gray-300 opacity-90'}`}>
-      {/* Image */}
-      <div className="relative h-48 bg-muted overflow-hidden">
+    <div className={`product-card group border rounded-xl overflow-hidden transition-all duration-300 bg-white ${product.inStock ? 'border-primary/20 hover:shadow-md' : 'border-gray-200 opacity-90'}`}>
+      {/* Image Container - Slightly shorter on mobile */}
+      <div className="relative h-32 xs:h-40 md:h-48 bg-muted/50 overflow-hidden">
         <img
           src={product.image}
           alt={t(product.nameKey)}
-          className={`w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-110 ${!product.inStock ? 'grayscale' : ''}`}
+          className={`w-full h-full object-contain p-2 md:p-4 transition-transform duration-300 group-hover:scale-110 ${!product.inStock ? 'grayscale' : ''}`}
         />
 
-        {/* Category Badge */}
-        <span className={`absolute top-3 left-3 ${product.category === 'Seeds' ? 'badge-seeds' : 'badge-pesticides'}`}>
+        {/* Category Badge - Smaller on mobile */}
+        <span className={`absolute top-2 left-2 text-[10px] md:text-xs px-2 py-0.5 rounded-full font-medium ${product.category === 'Seeds' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>
           {product.category === 'Seeds' ? t('products.seeds') : t('products.pesticides')}
         </span>
 
         {/* Discount Badge */}
-        {product.discountPercent && (
-          <span className="absolute top-3 right-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-            {product.discountPercent}% OFF
-          </span>
-        )}
-
-        {/* Out of Stock Badge */}
-        {!product.inStock && (
-          <span className="absolute bottom-3 right-3 bg-gray-900 text-white text-xs font-bold px-2 py-1 rounded-full">
-            Out of Stock
+        {product.discountPercent && product.inStock && (
+          <span className="absolute top-2 right-2 bg-red-500 text-white text-[10px] md:text-xs font-bold px-1.5 py-0.5 rounded-md">
+            {product.discountPercent}%
           </span>
         )}
       </div>
 
-      {/* Content */}
-      <div className="p-5">
-        <h3 className="font-bold text-lg text-foreground mb-2 line-clamp-1">
+      {/* Content Container - Reduced padding on mobile */}
+      <div className="p-3 md:p-5">
+        <h3 className="font-bold text-sm md:text-lg text-foreground mb-1 line-clamp-1">
           {t(product.nameKey)}
         </h3>
-        <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
+        
+        {/* Description - Hidden or very short on mobile to prevent congestion */}
+        <p className="text-muted-foreground text-[11px] md:text-sm mb-3 line-clamp-1 md:line-clamp-2">
           {t(product.descKey)}
         </p>
 
-        <div className="flex items-center justify-between">
-          <div>
-            <span className="text-2xl font-bold text-primary">{product.price}</span>
-            <span className="text-muted-foreground text-sm"> / {product.unit}</span>
+        <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+          <div className="flex items-baseline gap-1">
+            <span className="text-base md:text-xl font-bold text-primary">{product.price}</span>
+            <span className="text-muted-foreground text-[10px] md:text-sm">/{product.unit}</span>
           </div>
 
           <button
             onClick={handleAddToCart}
             disabled={!product.inStock}
-            className={`text-sm py-2 px-4 flex items-center gap-2 rounded-lg transition ${
+            className={`w-full md:w-auto text-[11px] md:text-sm py-1.5 md:py-2 px-3 flex items-center justify-center gap-1.5 rounded-lg transition-all ${
               product.inStock
-                ? 'btn-accent'
-                : 'bg-gray-300 text-gray-600 cursor-not-allowed'
+                ? 'bg-primary text-white hover:bg-primary-hover shadow-sm active:scale-95'
+                : 'bg-gray-200 text-gray-500 cursor-not-allowed'
             }`}
           >
-            <ShoppingCart className="w-4 h-4" />
-            {product.inStock ? t('products.addToCart') : 'Out of Stock'}
+            <ShoppingCart className="w-3.5 h-3.5" />
+            <span className="whitespace-nowrap">
+               {product.inStock ? t('products.addToCart') : 'Out'}
+            </span>
           </button>
         </div>
       </div>
@@ -128,19 +125,20 @@ const Products = () => {
   const { t } = useLanguage();
 
   return (
-    <section id="products" className="py-20 bg-muted/30">
-      <div className="container">
-        <div className="text-center mb-14">
-          <span className="inline-block px-4 py-1 bg-primary/10 text-primary font-semibold rounded-full text-sm mb-4">
+    <section id="products" className="py-12 md:py-20 bg-muted/30">
+      <div className="container px-4">
+        <div className="text-center mb-8 md:mb-14">
+          <span className="inline-block px-3 py-1 bg-primary/10 text-primary font-semibold rounded-full text-[12px] md:text-sm mb-3">
             {t('products.badge')}
           </span>
-          <h2 className="section-heading">{t('products.title')}</h2>
-          <p className="section-subheading">{t('products.subtitle')}</p>
+          <h2 className="text-2xl md:text-4xl font-bold text-foreground mb-2">{t('products.title')}</h2>
+          <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">{t('products.subtitle')}</p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Updated Grid: 2 columns on mobile, 4 on desktop */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
           {products.map((product, index) => (
-            <div key={product.id} className="animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
+            <div key={product.id} className="animate-fade-in" style={{ animationDelay: `${index * 0.05}s` }}>
               <ProductCard product={product} />
             </div>
           ))}
