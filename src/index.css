@@ -1,0 +1,223 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 120 20% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 120 20% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 120 20% 15%;
+
+    /* Primary - Forest Green */
+    --primary: 142 60% 32%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary - Golden Yellow */
+    --secondary: 45 100% 50%;
+    --secondary-foreground: 120 20% 15%;
+
+    /* Accent - Vibrant Red */
+    --accent: 0 80% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --muted: 120 10% 95%;
+    --muted-foreground: 120 10% 40%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 120 15% 85%;
+    --input: 120 15% 85%;
+    --ring: 142 60% 32%;
+
+    --radius: 0.75rem;
+
+    /* Custom agriculture colors */
+    --agro-green-light: 142 50% 45%;
+    --agro-green-dark: 142 70% 22%;
+    --agro-yellow: 45 100% 50%;
+    --agro-yellow-light: 48 100% 65%;
+    --agro-red: 0 80% 50%;
+    --agro-red-dark: 0 75% 40%;
+    --agro-earth: 30 40% 30%;
+
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(142 60% 32% / 0.95), hsl(142 70% 22% / 0.98));
+    --gradient-accent: linear-gradient(135deg, hsl(0 80% 50%), hsl(0 75% 40%));
+    --gradient-yellow: linear-gradient(135deg, hsl(45 100% 50%), hsl(48 100% 65%));
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%), hsl(120 10% 98%));
+
+    /* Shadows */
+    --shadow-card: 0 4px 20px -4px hsl(142 60% 32% / 0.15);
+    --shadow-button: 0 4px 14px -3px hsl(0 80% 50% / 0.4);
+    --shadow-navbar: 0 2px 20px -2px hsl(142 60% 32% / 0.1);
+  }
+
+  .dark {
+    --background: 120 20% 8%;
+    --foreground: 0 0% 95%;
+
+    --card: 120 15% 12%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 120 15% 12%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 142 55% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 45 100% 50%;
+    --secondary-foreground: 120 20% 15%;
+
+    --accent: 0 80% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --muted: 120 10% 20%;
+    --muted-foreground: 120 10% 60%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 120 10% 25%;
+    --input: 120 10% 25%;
+    --ring: 142 55% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Poppins', sans-serif;
+  }
+}
+
+@layer components {
+  .nav-link {
+    @apply relative font-medium text-foreground/80 transition-colors hover:text-primary;
+  }
+
+  .nav-link::after {
+    @apply absolute bottom-0 left-0 h-0.5 w-0 bg-primary transition-all duration-300 content-[''];
+  }
+
+  .nav-link:hover::after {
+    @apply w-full;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-primary-foreground font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5;
+  }
+
+  .btn-accent {
+    @apply font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5;
+    background: var(--gradient-accent);
+    color: white;
+    box-shadow: var(--shadow-button);
+  }
+
+  .btn-accent:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px -3px hsl(0 80% 50% / 0.5);
+  }
+
+  .btn-outline-hero {
+    @apply font-semibold px-6 py-3 rounded-lg transition-all duration-300 border-2 border-white text-white hover:bg-white hover:text-primary;
+  }
+
+  .section-heading {
+    @apply text-3xl md:text-4xl font-bold text-foreground mb-4;
+  }
+
+  .section-subheading {
+    @apply text-lg text-muted-foreground max-w-2xl mx-auto;
+  }
+
+  .product-card {
+    @apply bg-card rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-2;
+    box-shadow: var(--shadow-card);
+  }
+
+  .product-card:hover {
+    box-shadow: 0 8px 30px -6px hsl(142 60% 32% / 0.25);
+  }
+
+  .badge-seeds {
+    @apply inline-block px-3 py-1 rounded-full text-xs font-semibold;
+    background: hsl(var(--primary) / 0.15);
+    color: hsl(var(--primary));
+  }
+
+  .badge-pesticides {
+    @apply inline-block px-3 py-1 rounded-full text-xs font-semibold;
+    background: hsl(var(--accent) / 0.15);
+    color: hsl(var(--accent));
+  }
+
+  .highlight-card {
+    @apply bg-white p-6 rounded-xl text-center transition-all duration-300 hover:-translate-y-1;
+    box-shadow: var(--shadow-card);
+  }
+
+  .contact-input {
+    @apply w-full px-4 py-3 rounded-lg border border-border bg-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent;
+  }
+}
+
+@layer utilities {
+  .text-gradient-primary {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(142 60% 32%), hsl(142 55% 45%));
+  }
+
+  .text-gradient-accent {
+    @apply bg-clip-text text-transparent;
+    background-image: var(--gradient-accent);
+  }
+
+  .bg-hero-gradient {
+    background: var(--gradient-hero);
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
