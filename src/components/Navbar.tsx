@@ -32,15 +32,15 @@ const Navbar = () => {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-primary shadow-navbar py-3' : 'bg-white py-4'
+        isScrolled ? 'bg-primary shadow-navbar py-2' : 'bg-white py-3'
       }`}
     >
-      <div className="container mx-auto flex items-center justify-between px-4">
-        {/* Logo Section */}
-        <a href={isHomePage ? "#home" : "/"} className="flex items-center gap-2 md:gap-3 group min-w-0">
-          <img src={logo} alt="Logo" className="w-8 h-8 md:w-10 md:h-10 object-contain shrink-0" />
+      <div className="container mx-auto flex items-center justify-between px-2 md:px-4">
+        {/* Logo & Brand Name - Compact on Mobile */}
+        <a href={isHomePage ? "#home" : "/"} className="flex items-center gap-1.5 md:gap-3 group min-w-0">
+          <img src={logo} alt="Logo" className="w-7 h-7 md:w-10 md:h-10 object-contain shrink-0" />
           <span
-            className={`text-base md:text-xl font-bold whitespace-nowrap transition-colors overflow-hidden text-ellipsis ${
+            className={`text-sm md:text-xl font-bold whitespace-nowrap transition-colors ${
               isScrolled ? 'text-white' : 'text-primary'
             }`}
           >
@@ -48,39 +48,39 @@ const Navbar = () => {
           </span>
         </a>
 
-        {/* Right Side Actions (Desktop & Mobile) */}
-        <div className="flex items-center gap-3 md:gap-6 shrink-0">
+        {/* Desktop & Mobile Actions Group */}
+        <div className="flex items-center gap-1.5 md:gap-6 shrink-0">
           
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-6">
+          {/* Toggle and Nav Links (Links hidden on Mobile) */}
+          <div className="flex items-center gap-1.5 md:gap-6">
             <LanguageToggle isScrolled={isScrolled} isHomePage={isHomePage} />
-            {navLinks.map((link) => (
-              link.isRoute ? (
-                <Link 
-                  key={link.name} 
-                  to={link.href} 
-                  className={`font-medium transition-colors ${isScrolled ? 'text-white/90 hover:text-white' : 'text-primary hover:text-green-700'}`}
-                >
-                  {link.name}
-                </Link>
-              ) : (
-                <a 
-                  key={link.name} 
-                  href={link.href} 
-                  className={`font-medium transition-colors ${isScrolled ? 'text-white/90 hover:text-white' : 'text-primary hover:text-green-700'}`}
-                >
-                  {link.name}
-                </a>
-              )
-            ))}
+            
+            <div className="hidden md:flex items-center gap-6">
+              {navLinks.map((link) => (
+                link.isRoute ? (
+                  <Link 
+                    key={link.name} 
+                    to={link.href} 
+                    className={`font-medium transition-colors ${isScrolled ? 'text-white/90 hover:text-white' : 'text-primary hover:text-green-700'}`}
+                  >
+                    {link.name}
+                  </Link>
+                ) : (
+                  <a 
+                    key={link.name} 
+                    href={link.href} 
+                    className={`font-medium transition-colors ${isScrolled ? 'text-white/90 hover:text-white' : 'text-primary hover:text-green-700'}`}
+                  >
+                    {link.name}
+                  </a>
+                )
+              ))}
+            </div>
           </div>
 
-          {/* Cart Icon - Visible on both Desktop and Mobile */}
-          <div className="flex items-center">
-            <Cart />
-          </div>
+          <Cart />
 
-          {/* Desktop Call Button */}
+          {/* Desktop Only Call Button */}
           <div className="hidden md:block">
             <a href="tel:8008419933" className="btn-accent flex items-center gap-2">
               <Phone className="w-4 h-4" />
@@ -88,22 +88,19 @@ const Navbar = () => {
             </a>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Hamburger Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`md:hidden p-2 rounded-lg transition-colors ${isScrolled ? 'text-white' : 'text-primary'}`}
-            aria-label="Toggle menu"
+            className={`md:hidden p-1.5 rounded-lg ${isScrolled ? 'text-white' : 'text-primary'}`}
           >
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown */}
+      {/* Mobile Menu Dropdown (Nav Links only) */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-white border-t shadow-lg p-4 flex flex-col gap-4 animate-in fade-in slide-in-from-top-2">
-          <LanguageToggle isScrolled={false} isHomePage={true} />
-          
+        <div className="md:hidden absolute top-full left-0 right-0 bg-white border-t shadow-lg p-4 flex flex-col gap-4">
           {navLinks.map((link) => (
             <a 
               key={link.name} 
@@ -114,7 +111,6 @@ const Navbar = () => {
               {link.name}
             </a>
           ))}
-          
           <a href="tel:8008419933" className="btn-accent flex items-center justify-center gap-2 py-3">
             <Phone className="w-4 h-4" />
             {t('nav.callNow')}

@@ -9,21 +9,20 @@ interface LanguageToggleProps {
 const LanguageToggle = ({ isScrolled = false, isHomePage = true }: LanguageToggleProps) => {
   const { language, setLanguage } = useLanguage();
 
-  // Logic: Use white text when scrolled (green bg) or on other pages.
-  // Use primary green when NOT scrolled on the home page (white bg).
+  // Ensure visibility: Green text on white bg, White text on green bg
   const textColor = isScrolled || !isHomePage 
     ? 'text-white' 
     : 'text-primary';
 
   return (
-    <div className={`flex items-center gap-1 ${textColor} transition-colors duration-300`}>
-      <Globe className="w-4 h-4" />
+    <div className={`flex items-center gap-0.5 md:gap-1 ${textColor} transition-colors duration-300`}>
+      <Globe className="w-3 h-3 md:w-4 md:h-4 shrink-0" />
       
       <button
         onClick={() => setLanguage('te')}
-        className={`px-2 py-1 text-sm font-medium rounded transition-colors ${
+        className={`px-1 md:px-2 py-0.5 text-[10px] md:text-sm font-medium rounded transition-colors ${
           language === 'te'
-            ? 'bg-primary text-white' // Active button always green with white text
+            ? 'bg-primary text-white' 
             : isScrolled || !isHomePage
             ? 'hover:bg-white/20'
             : 'hover:bg-primary/10'
@@ -32,11 +31,11 @@ const LanguageToggle = ({ isScrolled = false, isHomePage = true }: LanguageToggl
         తెలుగు
       </button>
 
-      <span className="opacity-50">|</span>
+      <span className="opacity-30 text-[10px]">|</span>
 
       <button
         onClick={() => setLanguage('en')}
-        className={`px-2 py-1 text-sm font-medium rounded transition-colors ${
+        className={`px-1 md:px-2 py-0.5 text-[10px] md:text-sm font-medium rounded transition-colors ${
           language === 'en'
             ? 'bg-primary text-white'
             : isScrolled || !isHomePage
