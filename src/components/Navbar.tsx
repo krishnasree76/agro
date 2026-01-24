@@ -35,12 +35,12 @@ const Navbar = () => {
         isScrolled ? 'bg-primary shadow-navbar py-3' : 'bg-white py-4'
       }`}
     >
-      <div className="container mx-auto flex items-center justify-between">
+      <div className="container mx-auto flex items-center justify-between px-4">
         {/* Logo Section */}
-        <a href={isHomePage ? "#home" : "/"} className="flex items-center gap-3 group">
-          <img src={logo} alt="Logo" className="w-10 h-10 object-contain" />
+        <a href={isHomePage ? "#home" : "/"} className="flex items-center gap-2 md:gap-3 group min-w-0">
+          <img src={logo} alt="Logo" className="w-8 h-8 md:w-10 md:h-10 object-contain shrink-0" />
           <span
-            className={`text-xl font-bold whitespace-nowrap transition-colors ${
+            className={`text-base md:text-xl font-bold whitespace-nowrap transition-colors overflow-hidden text-ellipsis ${
               isScrolled ? 'text-white' : 'text-primary'
             }`}
           >
@@ -49,7 +49,7 @@ const Navbar = () => {
         </a>
 
         {/* Right Side Actions (Desktop & Mobile) */}
-        <div className="flex items-center gap-2 md:gap-6">
+        <div className="flex items-center gap-3 md:gap-6 shrink-0">
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-6">
@@ -76,8 +76,9 @@ const Navbar = () => {
           </div>
 
           {/* Cart Icon - Visible on both Desktop and Mobile */}
-          {/* On mobile, this will appear to the left of the Menu button */}
-          <Cart />
+          <div className="flex items-center">
+            <Cart />
+          </div>
 
           {/* Desktop Call Button */}
           <div className="hidden md:block">
@@ -90,7 +91,8 @@ const Navbar = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`md:hidden p-2 rounded-lg ${isScrolled ? 'text-white' : 'text-primary'}`}
+            className={`md:hidden p-2 rounded-lg transition-colors ${isScrolled ? 'text-white' : 'text-primary'}`}
+            aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
