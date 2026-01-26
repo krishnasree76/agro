@@ -50,7 +50,6 @@ const ProductCard = ({ product }: { product: Product }) => {
 
   const handleAddToCart = () => {
     if (!product.inStock) return;
-
     addToCart({
       id: product.id,
       name: t(product.nameKey),
@@ -58,7 +57,6 @@ const ProductCard = ({ product }: { product: Product }) => {
       unit: product.unit,
       quantity: qty,
     });
-
     toast({
       title: t("products.addedToCart"),
       description: `${qty} ${product.unit}(s) of ${t(product.nameKey)} added.`,
@@ -75,87 +73,89 @@ const ProductCard = ({ product }: { product: Product }) => {
       }`}
     >
       {/* Image Container */}
-      <div className="relative h-32 xs:h-40 md:h-48 bg-muted/30 overflow-hidden shrink-0">
+      <div className="relative h-28 xs:h-36 md:h-48 bg-muted/30 overflow-hidden shrink-0">
         <img
           src={product.image}
           alt={t(product.nameKey)}
-          className={`w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-110 ${
+          className={`w-full h-full object-contain p-2 md:p-4 transition-transform duration-500 group-hover:scale-110 ${
             !product.inStock ? "grayscale" : ""
           }`}
         />
-
-        {/* Category Badge */}
-        <span
-          className={`absolute top-2 left-2 text-[10px] md:text-xs px-2 py-0.5 rounded-full font-bold shadow-sm ${
-            product.category === "Seeds"
-              ? "bg-green-100 text-green-700 border border-green-200"
-              : "bg-blue-100 text-blue-700 border border-blue-200"
-          }`}
-        >
+        <span className="absolute top-1.5 left-1.5 text-[8px] md:text-xs px-1.5 py-0.5 rounded-full font-bold bg-white/80 backdrop-blur-sm border shadow-sm">
           {product.category === "Seeds" ? t("products.seeds") : t("products.pesticides")}
         </span>
-
-        {/* Discount Badge */}
         {product.discountPercent && product.inStock && (
-          <span className="absolute top-2 right-2 bg-red-600 text-white text-[10px] md:text-xs font-bold px-2 py-0.5 rounded shadow-sm">
+          <span className="absolute top-1.5 right-1.5 bg-red-600 text-white text-[8px] md:text-xs font-bold px-1.5 py-0.5 rounded shadow-sm">
             {product.discountPercent}% OFF
           </span>
         )}
       </div>
 
       {/* Content */}
-      <div className="p-4 flex flex-col flex-1">
-        <h3 className="font-bold text-sm md:text-lg text-foreground mb-1 line-clamp-1">
+      <div className="p-2.5 md:p-4 flex flex-col flex-1">
+        <h3 className="font-bold text-[13px] md:text-lg text-foreground mb-0.5 line-clamp-1">
           {t(product.nameKey)}
         </h3>
-
-        <p className="text-muted-foreground text-[11px] md:text-sm mb-4 line-clamp-2 h-8 md:h-10">
+        <p className="text-muted-foreground text-[10px] md:text-sm mb-2 line-clamp-1">
           {t(product.descKey)}
         </p>
 
-        {/* Action Row: Price & Quantity */}
-        <div className="mt-auto space-y-3">
-          <div className="flex items-end justify-between gap-2">
-            <div>
-              {product.discountPercent && (
-                <p className="text-[10px] md:text-xs text-red-500 line-through">
-                  ₹{product.price.toFixed(0)}
-                </p>
-              )}
-              <p className="text-lg md:text-xl font-bold text-primary">
-                ₹{finalPrice.toFixed(0)}
-                <span className="text-muted-foreground text-[10px] md:text-xs font-normal">
-                  /{product.unit}
-                </span>
-              </p>
+        <div className="mt-auto flex flex-col gap-2">
+          {/* Quantity Selector - Styled to match global font */}
+          <div className="flex flex-col gap-1">
+            <span className="text-[9px] text-muted-foreground font-semibold uppercase tracking-wider">
+              {t('cart.quantity') || 'Qty'}
+            </span>
+            <div className="relative">
+              <select
+                value={qty}
+                disabled={!product.inStock}
+                onChange={(e) => setQty(Number(e.target.value))}
+                className="w-full border border-gray-200 rounded-md px-2 py-1.5 text-[11px] md:text-sm font-medium text-foreground bg-white appearance-none focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-colors"
+                style={{ fontFamily: 'inherit' }} // Force inheritance of website font
+              >
+                {[1, 2, 3, 4, 5, 10].map((q) => (
+                  <option key={q} value={q} className="font-medium">
+                    {q} {product.unit}(s)
+                  </option>
+                ))}
+              </select>
+              {/* Custom arrow icon for a cleaner look */}
+              <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none text-muted-foreground">
+                <svg className="w-3 h-3 fill-current" viewBox="0 0 20 20">
+                  <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                </svg>
+              </div>
             </div>
+          </div>
 
-            <select
-              value={qty}
-              disabled={!product.inStock}
-              onChange={(e) => setQty(Number(e.target.value))}
-              className="border rounded-md px-1 py-1 text-xs md:text-sm bg-white focus:ring-1 focus:ring-primary outline-none"
-            >
-              {[1, 2, 3, 4, 5, 10].map((q) => (
-                <option key={q} value={q}>
-                  {q} {product.unit}(s)
-                </option>
-              ))}
-            </select>
+          {/* Price Section */}
+          <div className="py-1">
+            {product.discountPercent && (
+              <p className="text-[9px] md:text-xs text-red-500 font-medium line-through">
+                ₹{product.price.toFixed(0)}
+              </p>
+            )}
+            <p className="text-sm md:text-xl font-bold text-primary">
+              ₹{finalPrice.toFixed(0)}
+              <span className="text-muted-foreground text-[9px] md:text-xs font-normal">
+                /{product.unit}
+              </span>
+            </p>
           </div>
 
           <button
             onClick={handleAddToCart}
             disabled={!product.inStock}
-            className={`w-full py-2.5 px-4 flex items-center justify-center gap-2 rounded-lg font-semibold transition-all ${
+            className={`w-full py-2 flex items-center justify-center gap-1.5 rounded-lg font-bold transition-all ${
               product.inStock
                 ? "bg-primary text-white hover:bg-green-700 shadow-sm active:scale-95"
                 : "bg-gray-200 text-gray-500 cursor-not-allowed"
             }`}
           >
-            <ShoppingCart className="w-4 h-4" />
-            <span className="text-xs md:text-sm uppercase tracking-wide">
-              {product.inStock ? t("products.addToCart") : t("products.outOfStockLabel") || "Out of Stock"}
+            <ShoppingCart className="w-3 h-3 md:w-4 md:h-4" />
+            <span className="text-[10px] md:text-sm uppercase tracking-tight">
+              {product.inStock ? t("products.addToCart") : "OUT OF STOCK"}
             </span>
           </button>
         </div>
@@ -163,7 +163,6 @@ const ProductCard = ({ product }: { product: Product }) => {
     </div>
   );
 };
-
 const Products = () => {
   const { t } = useLanguage();
 
