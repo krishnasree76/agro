@@ -35,12 +35,12 @@ const Navbar = () => {
         isScrolled ? 'bg-primary shadow-navbar py-2' : 'bg-white py-3'
       }`}
     >
-      <div className="container mx-auto flex items-center justify-between px-2 md:px-4">
-        {/* Logo & Brand Name - Compact on Mobile */}
-        <a href={isHomePage ? "#home" : "/"} className="flex items-center gap-1.5 md:gap-3 group min-w-0">
-          <img src={logo} alt="Logo" className="w-7 h-7 md:w-10 md:h-10 object-contain shrink-0" />
+      <div className="container mx-auto flex items-center justify-between px-4">
+        {/* Logo & Brand Name - prevent it from taking 100% width on small screens */}
+        <a href={isHomePage ? "#home" : "/"} className="flex items-center gap-2 group max-w-[55%] md:max-w-none shrink-0">
+          <img src={logo} alt="Logo" className="w-8 h-8 md:w-10 md:h-10 object-contain shrink-0" />
           <span
-            className={`text-sm md:text-xl font-bold whitespace-nowrap transition-colors ${
+            className={`text-sm md:text-xl font-bold truncate transition-colors ${
               isScrolled ? 'text-white' : 'text-primary'
             }`}
           >
@@ -49,40 +49,33 @@ const Navbar = () => {
         </a>
 
         {/* Desktop & Mobile Actions Group */}
-        <div className="flex items-center gap-1.5 md:gap-6 shrink-0">
+        <div className="flex items-center gap-2 md:gap-6 shrink-0">
           
-          {/* Toggle and Nav Links (Links hidden on Mobile) */}
-          <div className="flex items-center gap-1.5 md:gap-6">
+          <div className="flex items-center gap-2 md:gap-6">
             <LanguageToggle isScrolled={isScrolled} isHomePage={isHomePage} />
             
             <div className="hidden md:flex items-center gap-6">
               {navLinks.map((link) => (
-                link.isRoute ? (
-                  <Link 
-                    key={link.name} 
-                    to={link.href} 
-                    className={`font-medium transition-colors ${isScrolled ? 'text-white/90 hover:text-white' : 'text-primary hover:text-green-700'}`}
-                  >
-                    {link.name}
-                  </Link>
-                ) : (
-                  <a 
-                    key={link.name} 
-                    href={link.href} 
-                    className={`font-medium transition-colors ${isScrolled ? 'text-white/90 hover:text-white' : 'text-primary hover:text-green-700'}`}
-                  >
-                    {link.name}
-                  </a>
-                )
+                <a 
+                  key={link.name} 
+                  href={link.href} 
+                  className={`font-medium transition-colors ${isScrolled ? 'text-white/90 hover:text-white' : 'text-primary hover:text-green-700'}`}
+                >
+                  {link.name}
+                </a>
               ))}
             </div>
           </div>
 
-          <Cart />
+          {/* Cart Component */}
+          <Cart isScrolled={isScrolled} />
 
-          {/* Desktop Only Call Button */}
+          {/* Desktop Only Call Button - RED */}
           <div className="hidden md:block">
-            <a href="tel:8008419933" className="btn-accent flex items-center gap-2">
+            <a 
+              href="tel:8008419933" 
+              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors font-semibold"
+            >
               <Phone className="w-4 h-4" />
               {t('nav.callNow')}
             </a>
@@ -91,28 +84,32 @@ const Navbar = () => {
           {/* Mobile Hamburger Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`md:hidden p-1.5 rounded-lg ${isScrolled ? 'text-white' : 'text-primary'}`}
+            className={`md:hidden p-2 rounded-lg transition-colors ${isScrolled ? 'text-white hover:bg-white/10' : 'text-primary hover:bg-gray-100'}`}
           >
-            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown (Nav Links only) */}
+      {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-white border-t shadow-lg p-4 flex flex-col gap-4">
+        <div className="md:hidden absolute top-full left-0 right-0 bg-white border-t shadow-xl p-4 flex flex-col gap-2">
           {navLinks.map((link) => (
             <a 
               key={link.name} 
               href={link.href} 
               onClick={() => setIsMobileMenuOpen(false)} 
-              className="text-primary font-medium py-2 border-b border-gray-100"
+              className="text-primary font-medium py-3 px-2 border-b border-gray-50"
             >
               {link.name}
             </a>
           ))}
-          <a href="tel:8008419933" className="btn-accent flex items-center justify-center gap-2 py-3">
-            <Phone className="w-4 h-4" />
+          {/* Mobile Call Button - RED */}
+          <a 
+            href="tel:8008419933" 
+            className="mt-2 bg-red-600 hover:bg-red-700 text-white flex items-center justify-center gap-2 py-4 rounded-lg font-bold transition-colors"
+          >
+            <Phone className="w-5 h-5" />
             {t('nav.callNow')}
           </a>
         </div>

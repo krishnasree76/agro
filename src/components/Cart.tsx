@@ -9,9 +9,13 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 
-const Cart = () => {
+interface CartProps {
+  isScrolled?: boolean;
+}
+
+const Cart = ({ isScrolled = false }: CartProps) => {
   const { items, removeFromCart, updateQuantity, clearCart, totalItems } = useCart();
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
 
   const handleWhatsAppOrder = () => {
     if (items.length === 0) return;
@@ -27,22 +31,34 @@ const Cart = () => {
     const message = encodeURIComponent(
       messageTemplate.replace('{items}', orderList)
     );
+
     window.open(`https://wa.me/918008419933?text=${message}`, '_blank');
   };
 
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <button className="relative p-2 rounded-lg hover:bg-primary/10 transition-colors">
-          <ShoppingCart className="w-6 h-6 text-primary" />
+        {/* Added shrink-0 and ensured z-index */}
+        <button
+          className={`relative p-2 rounded-lg transition-all shrink-0 z-10 ${
+            isScrolled ? 'hover:bg-white/20' : 'hover:bg-primary/10'
+          }`}
+        >
+          <ShoppingCart
+            className={`w-6 h-6 transition-colors ${
+              isScrolled ? 'text-white' : 'text-primary'
+            }`}
+          />
+
           {totalItems > 0 && (
-            <span className="absolute -top-1 -right-1 w-5 h-5 bg-accent text-white text-xs font-bold rounded-full flex items-center justify-center">
+            <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm">
               {totalItems}
             </span>
           )}
         </button>
       </SheetTrigger>
-      <SheetContent className="w-full sm:max-w-md">
+
+      <SheetContent className="w-[90%] sm:max-w-md">
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2 text-primary">
             <ShoppingCart className="w-5 h-5" />
@@ -73,10 +89,11 @@ const Cart = () => {
                         {item.price} / {item.unit}
                       </p>
                     </div>
+
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                        className="p-1 rounded bg-background hover:bg-muted transition-colors"
+                        className="p-1 rounded bg-background hover:bg-muted transition-colors border"
                       >
                         <Minus className="w-4 h-4" />
                       </button>
@@ -85,11 +102,12 @@ const Cart = () => {
                       </span>
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                        className="p-1 rounded bg-background hover:bg-muted transition-colors"
+                        className="p-1 rounded bg-background hover:bg-muted transition-colors border"
                       >
                         <Plus className="w-4 h-4" />
                       </button>
                     </div>
+
                     <button
                       onClick={() => removeFromCart(item.id)}
                       className="p-2 text-destructive hover:bg-destructive/10 rounded transition-colors"
@@ -107,9 +125,10 @@ const Cart = () => {
                 >
                   {t('cart.clearCart')}
                 </button>
+
                 <button
                   onClick={handleWhatsAppOrder}
-                  className="w-full btn-accent flex items-center justify-center gap-2 py-3"
+                  className="w-full bg-[#25D366] text-white font-bold flex items-center justify-center gap-2 py-3 rounded-lg hover:bg-[#128C7E] transition-colors"
                 >
                   <MessageCircle className="w-5 h-5" />
                   {t('cart.orderViaWhatsApp')}

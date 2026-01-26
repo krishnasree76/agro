@@ -40,6 +40,7 @@ const translations: Record<Language, Record<string, string>> = {
     'products.addedDesc': 'మీ కార్ట్‌కు జోడించబడింది.',
     'products.seeds': 'విత్తనాలు',
     'products.pesticides': 'పురుగుమందులు',
+    'products.outOfStockLabel': 'స్టాక్ లేదు',
     
     // Product Names
     'product.paddy': 'వరి విత్తనాలు (BPT 5204)',
@@ -155,6 +156,7 @@ const translations: Record<Language, Record<string, string>> = {
     'products.addedDesc': 'has been added to your cart.',
     'products.seeds': 'Seeds',
     'products.pesticides': 'Pesticides',
+    'products.outOfStockLabel': 'Out of Stock',
     
     // Product Names
     'product.paddy': 'Paddy Seeds (BPT 5204)',
