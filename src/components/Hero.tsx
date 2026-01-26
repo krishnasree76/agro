@@ -53,7 +53,7 @@ const Hero = () => {
                 <div className="text-white/70 text-sm">{t('hero.products')}</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-secondary">10+</div>
+                <div className="text-3xl font-bold text-secondary">25+</div>
                 <div className="text-white/70 text-sm">{t('hero.yearsExperience')}</div>
               </div>
             </div>
