@@ -83,51 +83,57 @@ const Cart = ({ isScrolled = false }: CartProps) => {
           ) : (
             <>
               <div className="flex-1 overflow-y-auto space-y-4 pr-2">
-                {items.map((item) => (
-                  <div
-                    key={`${item.id}-${item.unit}`}
-                    className="flex items-center gap-4 p-4 bg-muted/50 rounded-lg"
-                  >
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-foreground line-clamp-1">
-                        {item.name}
-                      </h4>
-                      <p className="text-sm text-muted-foreground">
-                        ₹{item.price.toFixed(2)} / {item.unit}
-                      </p>
-                    </div>
+  {items.map((item) => (
+    <div
+      key={`${item.id}-${item.unit}`}
+      className="flex items-start gap-4 p-4 bg-muted/50 rounded-lg"
+    >
+      {/* Product Info */}
+      <div className="flex-1 min-w-0">
+        <h4 className="font-semibold text-foreground break-words leading-snug">
+          {item.name}
+        </h4>
+        <p className="text-sm text-muted-foreground">
+          ₹{item.price.toFixed(2)} / {item.unit}
+        </p>
+      </div>
 
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() =>
-                          updateQuantity(item.id, item.unit, item.quantity - 1)
-                        }
-                        className="p-1 rounded bg-background hover:bg-muted transition-colors border"
-                      >
-                        <Minus className="w-4 h-4" />
-                      </button>
-                      <span className="w-8 text-center font-medium">
-                        {item.quantity}
-                      </span>
-                      <button
-                        onClick={() =>
-                          updateQuantity(item.id, item.unit, item.quantity + 1)
-                        }
-                        className="p-1 rounded bg-background hover:bg-muted transition-colors border"
-                      >
-                        <Plus className="w-4 h-4" />
-                      </button>
-                    </div>
+      {/* Quantity Controls */}
+      <div className="flex items-center gap-2 shrink-0">
+        <button
+          onClick={() =>
+            updateQuantity(item.id, item.unit, item.quantity - 1)
+          }
+          className="p-1 rounded bg-background hover:bg-muted transition-colors border"
+        >
+          <Minus className="w-4 h-4" />
+        </button>
 
-                    <button
-                      onClick={() => removeFromCart(item.id, item.unit)}
-                      className="p-2 text-destructive hover:bg-destructive/10 rounded transition-colors"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                ))}
-              </div>
+        <span className="w-8 text-center font-medium">
+          {item.quantity}
+        </span>
+
+        <button
+          onClick={() =>
+            updateQuantity(item.id, item.unit, item.quantity + 1)
+          }
+          className="p-1 rounded bg-background hover:bg-muted transition-colors border"
+        >
+          <Plus className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Remove Button */}
+      <button
+        onClick={() => removeFromCart(item.id, item.unit)}
+        className="p-2 text-destructive hover:bg-destructive/10 rounded transition-colors shrink-0"
+      >
+        <Trash2 className="w-4 h-4" />
+      </button>
+    </div>
+  ))}
+</div>
+
 
               {/* TOTAL SECTION */}
               <div className="border-t pt-4 mt-4 space-y-3">
