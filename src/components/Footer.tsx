@@ -1,5 +1,6 @@
-import { Leaf, Phone, MapPin, Mail } from 'lucide-react';
+import { Phone, MapPin, Mail } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
+import logo from '@/assets/logo.png';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -11,18 +12,24 @@ const Footer = () => {
         <div className="grid md:grid-cols-3 gap-10">
           {/* Brand */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-full bg-white/20">
-                <Leaf className="w-6 h-6 text-secondary" />
-              </div>
-              <span className="text-xl font-bold">Amulya Agro Agencies</span>
-            </div>
-            <p className="text-white/70 leading-relaxed">
-              {t('footer.tagline')}
-            </p>
-          </div>
+  <div className="flex items-center gap-3">
+    <img
+      src={logo}
+      alt="Amulya Agro Agencies Logo"
+      className="w-12 h-12 object-contain"
+    />
+    <span className="text-xl font-bold">
+      {t('footer.brandName')}
+    </span>
+  </div>
 
-          {/* ✅ Quick Links (Same structure as Navbar) */}
+  <p className="text-white/70 leading-relaxed">
+    {t('footer.tagline')}
+  </p>
+</div>
+
+
+          {/* Quick Links */}
           <div>
             <h4 className="font-bold text-lg mb-4">Quick Links</h4>
             <ul className="space-y-2">

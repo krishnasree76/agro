@@ -97,6 +97,8 @@ const translations: Record<Language, Record<string, string>> = {
     'contact.teluguAddress': 'అమూల్య ఆగ్రో ఏజెన్సీస్, స్టేషన్ రోడ్ వరంగల్',
     
     // Footer
+    'footer.brandName': 'అమూల్య ఆగ్రో ఏజెన్సీస్',
+
     'footer.tagline': 'నాణ్యమైన విత్తనాలు మరియు పురుగుమందుల కోసం మీ విశ్వసనీయ భాగస్వామి. వరంగల్ రైతులకు అసలు వ్యవసాయ ఉత్పత్తులతో సేవ.',
     'footer.products': 'ఉత్పత్తులు',
     'footer.seeds': 'విత్తనాలు',
@@ -212,6 +214,8 @@ const translations: Record<Language, Record<string, string>> = {
     'contact.teluguAddress': 'అమూల్య ఆగ్రో ఏజెన్సీస్, స్టేషన్ రోడ్ వరంగల్',
     
     // Footer
+    'footer.brandName': 'Amulya Agro Agencies',
+
     'footer.tagline': 'Your trusted partner for quality seeds and pesticides. Serving farmers in Warangal with genuine agricultural products.',
     'footer.products': 'Products',
     'footer.seeds': 'Seeds',

@@ -1,4 +1,4 @@
-import { ShoppingCart, X, Plus, Minus, Trash2, MessageCircle } from 'lucide-react';
+import { ShoppingCart, Plus, Minus, Trash2, MessageCircle } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useLanguage } from '@/context/LanguageContext';
 import {
@@ -14,7 +14,14 @@ interface CartProps {
 }
 
 const Cart = ({ isScrolled = false }: CartProps) => {
-  const { items, removeFromCart, updateQuantity, clearCart, totalItems } = useCart();
+  const {
+    items,
+    removeFromCart,
+    updateQuantity,
+    clearCart,
+    totalItems,
+    totalPrice,
+  } = useCart();
   const { t } = useLanguage();
 
   const handleWhatsAppOrder = () => {
@@ -23,13 +30,14 @@ const Cart = ({ isScrolled = false }: CartProps) => {
     const orderList = items
       .map(
         (item) =>
-          `• ${item.name} - ${item.quantity} ${item.unit}(s) @ ${item.price}/${item.unit}`
+          `• ${item.name} (${item.unit}) x ${item.quantity} = ₹${(
+            item.price * item.quantity
+          ).toFixed(2)}`
       )
       .join('\n');
 
-    const messageTemplate = t('cart.orderMessage');
     const message = encodeURIComponent(
-      messageTemplate.replace('{items}', orderList)
+      `Hi, I would like to order:\n\n${orderList}\n\n🧾 Total Amount: ₹${totalPrice.toFixed(2)}`
     );
 
     window.open(`https://wa.me/918008419933?text=${message}`, '_blank');
@@ -38,7 +46,6 @@ const Cart = ({ isScrolled = false }: CartProps) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        {/* Added shrink-0 and ensured z-index */}
         <button
           className={`relative p-2 rounded-lg transition-all shrink-0 z-10 ${
             isScrolled ? 'hover:bg-white/20' : 'hover:bg-primary/10'
@@ -78,7 +85,7 @@ const Cart = ({ isScrolled = false }: CartProps) => {
               <div className="flex-1 overflow-y-auto space-y-4 pr-2">
                 {items.map((item) => (
                   <div
-                    key={item.id}
+                    key={`${item.id}-${item.unit}`}
                     className="flex items-center gap-4 p-4 bg-muted/50 rounded-lg"
                   >
                     <div className="flex-1">
@@ -86,13 +93,15 @@ const Cart = ({ isScrolled = false }: CartProps) => {
                         {item.name}
                       </h4>
                       <p className="text-sm text-muted-foreground">
-                        {item.price} / {item.unit}
+                        ₹{item.price.toFixed(2)} / {item.unit}
                       </p>
                     </div>
 
                     <div className="flex items-center gap-2">
                       <button
-                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        onClick={() =>
+                          updateQuantity(item.id, item.unit, item.quantity - 1)
+                        }
                         className="p-1 rounded bg-background hover:bg-muted transition-colors border"
                       >
                         <Minus className="w-4 h-4" />
@@ -101,7 +110,9 @@ const Cart = ({ isScrolled = false }: CartProps) => {
                         {item.quantity}
                       </span>
                       <button
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        onClick={() =>
+                          updateQuantity(item.id, item.unit, item.quantity + 1)
+                        }
                         className="p-1 rounded bg-background hover:bg-muted transition-colors border"
                       >
                         <Plus className="w-4 h-4" />
@@ -109,7 +120,7 @@ const Cart = ({ isScrolled = false }: CartProps) => {
                     </div>
 
                     <button
-                      onClick={() => removeFromCart(item.id)}
+                      onClick={() => removeFromCart(item.id, item.unit)}
                       className="p-2 text-destructive hover:bg-destructive/10 rounded transition-colors"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -118,7 +129,13 @@ const Cart = ({ isScrolled = false }: CartProps) => {
                 ))}
               </div>
 
+              {/* TOTAL SECTION */}
               <div className="border-t pt-4 mt-4 space-y-3">
+                <div className="flex justify-between items-center text-lg font-bold">
+                  <span>Total</span>
+                  <span>₹{totalPrice.toFixed(2)}</span>
+                </div>
+
                 <button
                   onClick={clearCart}
                   className="w-full py-2 text-sm text-muted-foreground hover:text-destructive transition-colors"

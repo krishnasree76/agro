@@ -3,42 +3,44 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 export interface CartItem {
   id: number;
   name: string;
-  price: number; // ✅ Changed from string to number
-  unit: string;
+  price: number;
+  unit: string;   // e.g. "1 ltr", "500 ml"
   quantity: number;
 }
 
 interface CartContextType {
   items: CartItem[];
-  addToCart: (item: CartItem) => void; // ✅ Now accepts full item including quantity
-  removeFromCart: (id: number) => void;
-  updateQuantity: (id: number, quantity: number) => void;
+  addToCart: (item: CartItem) => void;
+  removeFromCart: (id: number, unit: string) => void;
+  updateQuantity: (id: number, unit: string, quantity: number) => void;
   clearCart: () => void;
   totalItems: number;
-  totalPrice: number; // ✅ Added helper for total cost
+  totalPrice: number;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-  // Initialize from localStorage to prevent losing cart on refresh
   const [items, setItems] = useState<CartItem[]>(() => {
     const savedCart = localStorage.getItem('amulya_cart');
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
-  // Save to localStorage whenever items change
   useEffect(() => {
     localStorage.setItem('amulya_cart', JSON.stringify(items));
   }, [items]);
 
+  // ✅ Add to cart (id + unit unique)
   const addToCart = (newItem: CartItem) => {
     setItems((prev) => {
-      const existing = prev.find((i) => i.id === newItem.id);
+      const existing = prev.find(
+        (i) => i.id === newItem.id && i.unit === newItem.unit
+      );
+
       if (existing) {
         return prev.map((i) =>
-          i.id === newItem.id 
-            ? { ...i, quantity: i.quantity + newItem.quantity } 
+          i.id === newItem.id && i.unit === newItem.unit
+            ? { ...i, quantity: i.quantity + newItem.quantity }
             : i
         );
       }
@@ -46,40 +48,30 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const removeFromCart = (id: number) => {
-    setItems((prev) => prev.filter((item) => item.id !== id));
+  const removeFromCart = (id: number, unit: string) => {
+    setItems((prev) => prev.filter((item) => !(item.id === id && item.unit === unit)));
   };
 
-  const updateQuantity = (id: number, quantity: number) => {
+  const updateQuantity = (id: number, unit: string, quantity: number) => {
     if (quantity <= 0) {
-      removeFromCart(id);
+      removeFromCart(id, unit);
       return;
     }
     setItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, quantity } : item))
+      prev.map((item) =>
+        item.id === id && item.unit === unit ? { ...item, quantity } : item
+      )
     );
   };
 
-  const clearCart = () => {
-    setItems([]);
-  };
+  const clearCart = () => setItems([]);
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-  
-  // Calculate total price of all items in cart
-  const totalPrice = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
     <CartContext.Provider
-      value={{ 
-        items, 
-        addToCart, 
-        removeFromCart, 
-        updateQuantity, 
-        clearCart, 
-        totalItems, 
-        totalPrice 
-      }}
+      value={{ items, addToCart, removeFromCart, updateQuantity, clearCart, totalItems, totalPrice }}
     >
       {children}
     </CartContext.Provider>
@@ -88,8 +80,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
 export const useCart = () => {
   const context = useContext(CartContext);
-  if (!context) {
-    throw new Error('useCart must be used within a CartProvider');
-  }
+  if (!context) throw new Error('useCart must be used within a CartProvider');
   return context;
 };
